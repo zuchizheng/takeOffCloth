@@ -555,7 +555,7 @@ class Game {
             btn.classList.remove('active');
         });
 
-        document.getElementById('body-tools').style.display = 'none';
+        // body-tools (背景设置) 始终显示，不隐藏
         document.getElementById('cloth-tools').style.display = 'none';
         document.getElementById('play-tools').style.display = 'none';
 
