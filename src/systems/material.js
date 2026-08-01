@@ -277,10 +277,17 @@ export class MaterialSystem {
             if (clothSystem.isFaceBroken(f)) continue;
 
             const [a, b, c, d] = f.p;
-            const area = quadArea(a.pos, b.pos, c.pos, d.pos);
+            // 用带符号的面积判断正反面
+            const signedArea = quadAreaSigned(a.pos, b.pos, c.pos, d.pos);
+            const area = Math.abs(signedArea);
             if (area < 0.5) continue; // 完全折叠，跳过
 
             let shade = this.shadeFactor(f.restArea > 0.01 ? area / f.restArea : 1);
+
+            // 背面稍微变暗，但仍然显示
+            if (signedArea < 0) {
+                shade *= 0.7; // 背面变暗 30%
+            }
 
             // 光泽：上亮下暗的竖向渐变，逐面片算，避免整体叠加染到背景
             if (this.sheen > 0.01) {
@@ -466,4 +473,11 @@ function quadArea(a, b, c, d) {
     const cross = (p, q, r) =>
         (q.x - p.x) * (r.y - p.y) - (q.y - p.y) * (r.x - p.x);
     return (Math.abs(cross(a, b, c)) + Math.abs(cross(a, c, d))) * 0.5;
+}
+
+// 四边形带符号面积（用于判断正反面）
+function quadAreaSigned(a, b, c, d) {
+    const cross = (p, q, r) =>
+        (q.x - p.x) * (r.y - p.y) - (q.y - p.y) * (r.x - p.x);
+    return (cross(a, b, c) + cross(a, c, d)) * 0.5;
 }
