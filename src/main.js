@@ -58,10 +58,7 @@ class Game {
     }
 
     initUI() {
-        // 模式切换
-        document.getElementById('mode-edit-body').addEventListener('click', () => {
-            this.setMode('edit-body');
-        });
+        // 模式切换（移除已隐藏的 edit-body 模式）
         document.getElementById('mode-edit-cloth').addEventListener('click', () => {
             this.setMode('edit-cloth');
         });
@@ -69,12 +66,7 @@ class Game {
             this.setMode('play');
         });
 
-        // 身体编辑工具
-        document.getElementById('add-capsule').addEventListener('click', () => {
-            this.isAddingCapsule = !this.isAddingCapsule;
-            document.getElementById('add-capsule').classList.toggle('active', this.isAddingCapsule);
-        });
-
+        // 背景照片导入（移除 add-capsule 按钮事件）
         document.getElementById('load-image').addEventListener('click', () => {
             document.getElementById('image-input').click();
         });
@@ -338,9 +330,7 @@ class Game {
         document.getElementById('tool-knife').addEventListener('click', () => {
             this.setTool('knife');
         });
-        document.getElementById('tool-wind').addEventListener('click', () => {
-            this.setTool('wind');
-        });
+        // 移除 tool-wind 事件监听（功能已隐藏）
 
         // 控制
         document.getElementById('reset').addEventListener('click', () => {
@@ -569,10 +559,8 @@ class Game {
         document.getElementById('cloth-tools').style.display = 'none';
         document.getElementById('play-tools').style.display = 'none';
 
-        if (mode === 'edit-body') {
-            document.getElementById('mode-edit-body').classList.add('active');
-            document.getElementById('body-tools').style.display = 'block';
-        } else if (mode === 'edit-cloth') {
+        // 移除 edit-body 模式的处理
+        if (mode === 'edit-cloth') {
             document.getElementById('mode-edit-cloth').classList.add('active');
             document.getElementById('cloth-tools').style.display = 'block';
         } else if (mode === 'play') {
