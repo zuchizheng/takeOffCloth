@@ -204,59 +204,105 @@ export class MaterialSystem {
         const bb = clothSystem.getBounds();
         if (!bb) return;
 
-        const loops = clothSystem.getBoundaryLoops();
-        if (loops.length === 0) return;
+        const spanY = Math.max(1, bb.maxY - bb.minY);
+        const fine = this.texData && this.texMode === 'fine';
 
-        // thickness 偏移要算进包围盒，避免背面层被裁掉
-        const thickPad = Math.ceil(this.thickness);
-        const pad = 24 + thickPad; // 留出模糊扩散、描边和厚度偏移的余量
-        const bx = Math.floor(bb.minX - pad);
-        const by = Math.floor(bb.minY - pad);
-        const bw = Math.ceil(bb.maxX - bb.minX + pad * 2);
-        const bh = Math.ceil(bb.maxY - bb.minY + pad * 2);
-        if (bw <= 0 || bh <= 0) return;
+        // 收集并排序所有面片
+        const allFaces = [];
+        for (const f of faces) {
+            if (clothSystem.isFaceBroken(f)) continue;
 
-        const buf = this._ensureBuffer(bw, bh);
-        if (!buf) return;
-        const bctx = buf.ctx;
+            const [a, b, c, d] = f.p;
+            const signedArea = quadAreaSigned(a.pos, b.pos, c.pos, d.pos);
+            const area = Math.abs(signedArea);
+            if (area < 0.5) continue;
 
-        bctx.setTransform(1, 0, 0, 1, 0, 0);
-        bctx.clearRect(0, 0, buf.canvas.width, buf.canvas.height);
-        // 之后都用世界坐标画，省得每处减一遍偏移
-        bctx.setTransform(1, 0, 0, 1, -bx, -by);
+            const avgY = (a.pos.y + b.pos.y + c.pos.y + d.pos.y) / 4;
+            const isBack = signedArea < 0;
 
-        // 缓冲区里不裁剪，让颜色铺满整块。这样合成时的模糊在轮廓附近
-        // 采到的是真实颜色，而不是把透明背景吸进来导致边缘发虚
-
-        // 1. 先画背面层（厚度模拟）：整体偏移 + 变暗
-        if (this.thickness > 0.1) {
-            bctx.save();
-            bctx.translate(this.thickness, this.thickness);
-            this._paintFaces(bctx, clothSystem, faces, bb, this.thicknessDarken);
-            bctx.restore();
+            allFaces.push({
+                face: f,
+                signedArea,
+                area,
+                avgY,
+                isBack,
+                // 背面排序键更小，确保先画
+                sortKey: isBack ? avgY - 10000 : avgY
+            });
         }
 
-        // 2. 再画正面层（正常亮度）
-        this._paintFaces(bctx, clothSystem, faces, bb, 1.0);
+        // 统一排序：背面优先，然后按 Y 坐标从大到小
+        allFaces.sort((a, b) => b.sortKey - a.sortKey);
 
+        // 直接在主画布上绘制，不使用离屏缓冲区和 clip
         ctx.save();
         ctx.globalAlpha = this.opacity;
 
-        // 裁剪放在主画布：模糊只抹平布料内部的色阶，轮廓由 clip 保持锐利。
-        // 之前把模糊加在整张缓冲的合成上，连边缘一起糊了，整体像失焦。
-        // nonzero：多层布料重叠时正常遮挡，不会镂空；
-        // 只有切出洞时才需要 evenodd（内外环相反缠绕）
-        ctx.beginPath();
-        for (const loop of loops) {
-            traceSmooth(ctx, loop, this.smooth);
+        // 先画厚度层（背面偏移）
+        if (this.thickness > 0.1) {
+            ctx.save();
+            ctx.translate(this.thickness, this.thickness);
+            for (const fd of allFaces) {
+                const backfaceFactor = fd.isBack ? 0.7 : 1.0;
+                this._renderSingleFaceDirect(ctx, fd.face, fd.area, bb, spanY, this.thicknessDarken, fine, backfaceFactor);
+            }
+            ctx.restore();
         }
-        ctx.clip('nonzero');
 
-        if (this.blur > 0.01 && typeof ctx.filter === 'string') {
-            ctx.filter = `blur(${this.blur}px)`;
+        // 再画正常层
+        for (const fd of allFaces) {
+            const backfaceFactor = fd.isBack ? 0.7 : 1.0;
+            this._renderSingleFaceDirect(ctx, fd.face, fd.area, bb, spanY, 1.0, fine, backfaceFactor);
         }
-        ctx.drawImage(buf.canvas, bx, by);
-        ctx.restore(); // filter 属于画布状态，restore 会一起还原
+
+        ctx.restore();
+    }
+
+    // 直接在主画布上渲染单个面片（不使用离屏缓冲区）
+    _renderSingleFaceDirect(ctx, f, area, bb, spanY, darkenFactor, fine, backfaceFactor) {
+        const [a, b, c, d] = f.p;
+
+        let shade = this.shadeFactor(f.restArea > 0.01 ? area / f.restArea : 1);
+
+        // 应用背面变暗系数
+        shade *= backfaceFactor;
+
+        // 光泽：上亮下暗的竖向渐变
+        if (this.sheen > 0.01) {
+            const cy = (a.pos.y + b.pos.y + c.pos.y + d.pos.y) / 4;
+            const ny = (cy - bb.minY) / spanY;
+            shade *= 1 + this.sheen * 0.22 * (1 - 2 * ny);
+        }
+
+        // 应用变暗系数（厚度层用）
+        shade *= darkenFactor;
+
+        if (fine) {
+            this.drawTexturedQuad(ctx, f, shade);
+        } else {
+            let col;
+            if (this.texData) {
+                if (f._texToken !== this.texToken) {
+                    f._sampled = this.sampleTexel(f.uc, f.vc);
+                    f._texToken = this.texToken;
+                }
+                col = f._sampled;
+            } else {
+                col = this._rgb;
+            }
+            ctx.fillStyle = shadeToCss(col, shade);
+            ctx.beginPath();
+            ctx.moveTo(a.pos.x, a.pos.y);
+            ctx.lineTo(b.pos.x, b.pos.y);
+            ctx.lineTo(c.pos.x, c.pos.y);
+            ctx.lineTo(d.pos.x, d.pos.y);
+            ctx.closePath();
+            ctx.fill();
+            // 描边填掉面片之间的抗锯齿缝隙
+            ctx.strokeStyle = ctx.fillStyle;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
     }
 
     // 把明暗和贴图画进缓冲区（调用方已设好坐标偏移，裁剪在主画布上做）
