@@ -12,16 +12,17 @@
             <h2>工具栏</h2>
             <div class="tool-section">
                 <h3>模式</h3>
-                <button id="mode-edit-body" class="tool-btn active">编辑身体</button>
-                <button id="mode-edit-cloth" class="tool-btn">编辑衣服</button>
+                <button id="mode-edit-cloth" class="tool-btn active">编辑衣服</button>
                 <button id="mode-play" class="tool-btn">游戏模式</button>
             </div>
-            <div class="tool-section" id="body-tools">
+            <!-- 隐藏未完善的身体编辑功能
+            <div class="tool-section" id="body-tools" style="display:none">
                 <h3>身体编辑</h3>
                 <button id="add-capsule" class="tool-btn">添加胶囊体</button>
                 <button id="load-image" class="tool-btn">导入照片</button>
                 <input type="file" id="image-input" accept="image/*" style="display:none">
             </div>
+            -->
             <div class="tool-section" id="cloth-tools" style="display:none">
                 <h3>衣服编辑</h3>
                 <button id="draw-cloth" class="tool-btn">绘制衣服</button>
@@ -90,7 +91,9 @@
                 <h3>交互工具</h3>
                 <button id="tool-hand" class="tool-btn active">手(拖拽)</button>
                 <button id="tool-knife" class="tool-btn">小刀(切割)</button>
+                <!-- 隐藏未完善的风场功能
                 <button id="tool-wind" class="tool-btn">风场</button>
+                -->
             </div>
             <div class="tool-section">
                 <h3>场景管理</h3>
