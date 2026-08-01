@@ -315,10 +315,6 @@ export class MaterialSystem {
     _renderSingleFace(bctx, f, signedArea, area, bb, spanY, darkenFactor, fine, backfaceFactor) {
         const [a, b, c, d] = f.p;
 
-    // 渲染单个面片
-    _renderSingleFace(bctx, f, signedArea, area, bb, spanY, darkenFactor, fine, backfaceFactor) {
-        const [a, b, c, d] = f.p;
-
         let shade = this.shadeFactor(f.restArea > 0.01 ? area / f.restArea : 1);
 
         // 应用背面变暗系数
