@@ -273,59 +273,93 @@ export class MaterialSystem {
         bctx.fillRect(bb.minX - 24, bb.minY - 24,
             bb.maxX - bb.minX + 48, bb.maxY - bb.minY + 48);
 
+        // 分离正面和背面，并计算深度（Y坐标的平均值）
+        const backFaces = [];
+        const frontFaces = [];
+
         for (const f of faces) {
             if (clothSystem.isFaceBroken(f)) continue;
 
             const [a, b, c, d] = f.p;
-            // 用带符号的面积判断正反面
             const signedArea = quadAreaSigned(a.pos, b.pos, c.pos, d.pos);
             const area = Math.abs(signedArea);
             if (area < 0.5) continue; // 完全折叠，跳过
 
-            let shade = this.shadeFactor(f.restArea > 0.01 ? area / f.restArea : 1);
+            const avgY = (a.pos.y + b.pos.y + c.pos.y + d.pos.y) / 4;
+            const faceData = { face: f, signedArea, area, avgY };
 
-            // 背面稍微变暗，但仍然显示
             if (signedArea < 0) {
-                shade *= 0.7; // 背面变暗 30%
-            }
-
-            // 光泽：上亮下暗的竖向渐变，逐面片算，避免整体叠加染到背景
-            if (this.sheen > 0.01) {
-                const cy = (a.pos.y + b.pos.y + c.pos.y + d.pos.y) / 4;
-                const ny = (cy - bb.minY) / spanY; // 0=顶 1=底
-                shade *= 1 + this.sheen * 0.22 * (1 - 2 * ny);
-            }
-
-            // 应用变暗系数（背面层用）
-            shade *= darkenFactor;
-
-            if (fine) {
-                this.drawTexturedQuad(bctx, f, shade);
+                backFaces.push(faceData);
             } else {
-                let col;
-                if (this.texData) {
-                    // 面片中心 UV 采一次色，缓存起来（贴图不变则不重采）
-                    if (f._texToken !== this.texToken) {
-                        f._sampled = this.sampleTexel(f.uc, f.vc);
-                        f._texToken = this.texToken;
-                    }
-                    col = f._sampled;
-                } else {
-                    col = this._rgb;
-                }
-                bctx.fillStyle = shadeToCss(col, shade);
-                bctx.beginPath();
-                bctx.moveTo(a.pos.x, a.pos.y);
-                bctx.lineTo(b.pos.x, b.pos.y);
-                bctx.lineTo(c.pos.x, c.pos.y);
-                bctx.lineTo(d.pos.x, d.pos.y);
-                bctx.closePath();
-                bctx.fill();
-                // 描边填掉面片之间的抗锯齿缝隙
-                bctx.strokeStyle = bctx.fillStyle;
-                bctx.lineWidth = 1;
-                bctx.stroke();
+                frontFaces.push(faceData);
             }
+        }
+
+        // 先画背面（从后往前），再画正面（从后往前）
+        // Y 值小的在上面，应该后画（覆盖下面的）
+        backFaces.sort((a, b) => b.avgY - a.avgY); // 后面的先画
+        frontFaces.sort((a, b) => b.avgY - a.avgY);
+
+        // 渲染背面
+        for (const fd of backFaces) {
+            this._renderSingleFace(bctx, fd.face, fd.signedArea, fd.area, bb, spanY, darkenFactor, fine, 0.7);
+        }
+
+        // 渲染正面
+        for (const fd of frontFaces) {
+            this._renderSingleFace(bctx, fd.face, fd.signedArea, fd.area, bb, spanY, darkenFactor, fine, 1.0);
+        }
+    }
+
+    // 渲染单个面片
+    _renderSingleFace(bctx, f, signedArea, area, bb, spanY, darkenFactor, fine, backfaceFactor) {
+        const [a, b, c, d] = f.p;
+
+    // 渲染单个面片
+    _renderSingleFace(bctx, f, signedArea, area, bb, spanY, darkenFactor, fine, backfaceFactor) {
+        const [a, b, c, d] = f.p;
+
+        let shade = this.shadeFactor(f.restArea > 0.01 ? area / f.restArea : 1);
+
+        // 应用背面变暗系数
+        shade *= backfaceFactor;
+
+        // 光泽：上亮下暗的竖向渐变，逐面片算，避免整体叠加染到背景
+        if (this.sheen > 0.01) {
+            const cy = (a.pos.y + b.pos.y + c.pos.y + d.pos.y) / 4;
+            const ny = (cy - bb.minY) / spanY; // 0=顶 1=底
+            shade *= 1 + this.sheen * 0.22 * (1 - 2 * ny);
+        }
+
+        // 应用变暗系数（背面层用）
+        shade *= darkenFactor;
+
+        if (fine) {
+            this.drawTexturedQuad(bctx, f, shade);
+        } else {
+            let col;
+            if (this.texData) {
+                // 面片中心 UV 采一次色，缓存起来（贴图不变则不重采）
+                if (f._texToken !== this.texToken) {
+                    f._sampled = this.sampleTexel(f.uc, f.vc);
+                    f._texToken = this.texToken;
+                }
+                col = f._sampled;
+            } else {
+                col = this._rgb;
+            }
+            bctx.fillStyle = shadeToCss(col, shade);
+            bctx.beginPath();
+            bctx.moveTo(a.pos.x, a.pos.y);
+            bctx.lineTo(b.pos.x, b.pos.y);
+            bctx.lineTo(c.pos.x, c.pos.y);
+            bctx.lineTo(d.pos.x, d.pos.y);
+            bctx.closePath();
+            bctx.fill();
+            // 描边填掉面片之间的抗锯齿缝隙
+            bctx.strokeStyle = bctx.fillStyle;
+            bctx.lineWidth = 1;
+            bctx.stroke();
         }
     }
 
