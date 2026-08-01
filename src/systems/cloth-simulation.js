@@ -78,7 +78,7 @@ export class ClothSystem {
         this.clothPieces = []; // 每件衣服是一个粒子和约束的集合
         this.currentDrawing = [];
         this.stiffness = 0.5; // 稍微提高刚度保持形状
-        this.gravity = 1200; // 增加重力让布料更容易下落
+        this.gravity = 600; // 降低重力，避免布料被拉得太长
         this.resolution = 8; // 网格间距，越小越密（渲染更细腻但更吃性能）
     }
 
@@ -293,7 +293,7 @@ export class ClothSystem {
     }
 
     update(dt, bodySystem) {
-        const subSteps = 3; // 进一步减少子步数
+        const subSteps = 5; // 增加子步数，提高稳定性
         const subDt = dt / subSteps;
 
         for (let step = 0; step < subSteps; step++) {
@@ -304,11 +304,13 @@ export class ClothSystem {
                 }
             });
 
-            // 更新粒子 - 更低的阻尼
-            this.particles.forEach(p => p.update(subDt, 0.98));
+            // 更新粒子 - 提高阻尼防止过度拉伸
+            this.particles.forEach(p => p.update(subDt, 0.99));
 
-            // 求解约束 - 只迭代1次，让布料更柔软
-            this.constraints.forEach(c => c.solve());
+            // 求解约束 - 增加迭代次数，保持布料形状
+            for (let i = 0; i < 3; i++) {
+                this.constraints.forEach(c => c.solve());
+            }
 
             // 碰撞检测（与身体胶囊体）
             this.particles.forEach(p => {
