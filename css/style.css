@@ -1,0 +1,130 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Microsoft YaHei', Arial, sans-serif;
+    overflow: hidden;
+    background: #1a1a1a;
+    color: #fff;
+}
+
+#app {
+    display: flex;
+    height: 100vh;
+}
+
+#toolbar {
+    width: 250px;
+    background: #2a2a2a;
+    padding: 20px;
+    overflow-y: auto;
+    border-right: 2px solid #444;
+}
+
+#toolbar h2 {
+    margin-bottom: 20px;
+    color: #fff;
+    font-size: 20px;
+}
+
+.tool-section {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #444;
+}
+
+.tool-section h3 {
+    margin-bottom: 10px;
+    color: #aaa;
+    font-size: 14px;
+}
+
+.tool-btn {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 8px;
+    background: #3a3a3a;
+    border: 2px solid #555;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+    font-size: 14px;
+}
+
+.tool-btn:hover {
+    background: #4a4a4a;
+    border-color: #666;
+}
+
+.tool-btn.active {
+    background: #0066cc;
+    border-color: #0088ff;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: #ccc;
+}
+
+input[type="range"] {
+    width: 100%;
+    margin-top: 5px;
+}
+
+select {
+    width: 100%;
+    margin-top: 5px;
+    padding: 6px;
+    background: #3a3a3a;
+    border: 1px solid #555;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+input[type="color"] {
+    width: 100%;
+    height: 28px;
+    margin-top: 5px;
+    padding: 0;
+    background: #3a3a3a;
+    border: 1px solid #555;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type="checkbox"] {
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+#canvas-container {
+    flex: 1;
+    position: relative;
+    background: #1a1a1a;
+}
+
+#main-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+}
+
+#main-canvas.hand-cursor {
+    cursor: grab;
+}
+
+#main-canvas.hand-cursor:active {
+    cursor: grabbing;
+}
+
+#main-canvas.knife-cursor {
+    cursor: crosshair;
+}

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>布料模拟游戏</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        <div id="toolbar">
+            <h2>工具栏</h2>
+            <div class="tool-section">
+                <h3>模式</h3>
+                <button id="mode-edit-body" class="tool-btn active">编辑身体</button>
+                <button id="mode-edit-cloth" class="tool-btn">编辑衣服</button>
+                <button id="mode-play" class="tool-btn">游戏模式</button>
+            </div>
+            <div class="tool-section" id="body-tools">
+                <h3>身体编辑</h3>
+                <button id="add-capsule" class="tool-btn">添加胶囊体</button>
+                <button id="load-image" class="tool-btn">导入照片</button>
+                <input type="file" id="image-input" accept="image/*" style="display:none">
+            </div>
+            <div class="tool-section" id="cloth-tools" style="display:none">
+                <h3>衣服编辑</h3>
+                <button id="draw-cloth" class="tool-btn">绘制衣服</button>
+                <button id="import-cloth" class="tool-btn">导入衣服图片</button>
+                <input type="file" id="cloth-image-input" accept="image/*" style="display:none">
+                <button id="finish-cloth" class="tool-btn" style="display:none">完成绘制</button>
+                <button id="cancel-cloth" class="tool-btn" style="display:none">取消绘制</button>
+                <button id="pin-points" class="tool-btn">固定点模式</button>
+                <button id="draw-track" class="tool-btn">绘制滑轨</button>
+                <button id="finish-track" class="tool-btn" style="display:none">完成滑轨</button>
+                <button id="cancel-track" class="tool-btn" style="display:none">取消滑轨</button>
+                <button id="bind-track" class="tool-btn">绑定滑轨节点</button>
+                <button id="clear-track" class="tool-btn">清除滑轨</button>
+                <label>滑轨摩擦力: <span id="track-friction-value">0.1</span><input type="range" id="track-friction" min="0" max="1" step="0.02" value="0.1"></label>
+                <button id="clear-cloth" class="tool-btn">清除衣服</button>
+                <label>弹性系数: <span id="stiffness-value">0.5</span><input type="range" id="cloth-stiffness" min="0.1" max="1.0" step="0.05" value="0.5"></label>
+                <label>网格间距(越小越密): <span id="resolution-value">8</span><input type="range" id="cloth-resolution" min="5" max="25" step="1" value="8"></label>
+            </div>
+            <div class="tool-section" id="cloth-transform-tools" style="display:none">
+                <h3>衣服变换</h3>
+                <label>缩放: <span id="cloth-scale-value">1.00</span><input type="range" id="cloth-scale" min="0.2" max="3.0" step="0.05" value="1.0"></label>
+                <label>X偏移: <span id="cloth-offset-x-value">0</span><input type="range" id="cloth-offset-x" min="-500" max="500" step="10" value="0"></label>
+                <label>Y偏移: <span id="cloth-offset-y-value">0</span><input type="range" id="cloth-offset-y" min="-500" max="500" step="10" value="0"></label>
+                <label>透明度: <span id="cloth-preview-opacity-value">0.70</span><input type="range" id="cloth-preview-opacity" min="0.1" max="1" step="0.05" value="0.7"></label>
+                <button id="confirm-cloth-import" class="tool-btn">确认生成布料</button>
+                <button id="cancel-cloth-import" class="tool-btn">取消导入</button>
+            </div>
+            <div class="tool-section" id="material-tools">
+                <h3>布料材质</h3>
+                <label>预设
+                    <select id="mat-preset">
+                        <option value="cotton">棉布</option>
+                        <option value="silk">丝绸</option>
+                        <option value="denim">牛仔</option>
+                        <option value="leather">皮革</option>
+                        <option value="lace">蕾丝</option>
+                    </select>
+                </label>
+                <label>底色 <input type="color" id="mat-color" value="#e8e2d5"></label>
+                <label>不透明度: <span id="mat-opacity-value">1.00</span><input type="range" id="mat-opacity" min="0.15" max="1" step="0.05" value="1"></label>
+                <label>光泽: <span id="mat-sheen-value">0.12</span><input type="range" id="mat-sheen" min="0" max="1" step="0.02" value="0.12"></label>
+                <label>褶皱明暗: <span id="mat-fold-value">0.35</span><input type="range" id="mat-fold" min="0" max="0.9" step="0.05" value="0.35"></label>
+                <label>厚度: <span id="mat-thickness-value">2.5</span><input type="range" id="mat-thickness" min="0" max="8" step="0.5" value="2.5"></label>
+                <label>厚度暗度: <span id="mat-thickness-darken-value">0.60</span><input type="range" id="mat-thickness-darken" min="0.2" max="1" step="0.05" value="0.6"></label>
+                <label>柔化(去方格): <span id="mat-blur-value">3</span><input type="range" id="mat-blur" min="0" max="12" step="0.5" value="3"></label>
+                <label>轮廓平滑: <span id="mat-smooth-value">1.0</span><input type="range" id="mat-smooth" min="0" max="1.5" step="0.1" value="1"></label>
+                <button id="mat-load-texture" class="tool-btn">导入布料贴图</button>
+                <button id="mat-clear-texture" class="tool-btn">清除贴图</button>
+                <input type="file" id="mat-texture-input" accept="image/*" style="display:none">
+                <label>贴图质量
+                    <select id="mat-tex-mode">
+                        <option value="fast">快速(每格取色)</option>
+                        <option value="fine">精细(逐格贴图)</option>
+                    </select>
+                </label>
+                <label>显示方式
+                    <select id="mat-render-mode">
+                        <option value="material">材质</option>
+                        <option value="both">材质+网格</option>
+                        <option value="wireframe">仅网格</option>
+                    </select>
+                </label>
+                <label><input type="checkbox" id="mat-show-nodes" checked> 显示节点标记</label>
+            </div>
+            <div class="tool-section" id="play-tools" style="display:none">
+                <h3>交互工具</h3>
+                <button id="tool-hand" class="tool-btn active">手(拖拽)</button>
+                <button id="tool-knife" class="tool-btn">小刀(切割)</button>
+                <button id="tool-wind" class="tool-btn">风场</button>
+            </div>
+            <div class="tool-section">
+                <h3>场景管理</h3>
+                <button id="save-scene" class="tool-btn">保存场景到文件</button>
+                <button id="load-scene" class="tool-btn">从文件读取场景</button>
+                <button id="quick-save" class="tool-btn">快速保存</button>
+                <button id="quick-load" class="tool-btn">快速读取</button>
+                <input type="file" id="scene-file-input" accept=".json" style="display:none">
+            </div>
+            <div class="tool-section">
+                <h3>控制</h3>
+                <button id="reset" class="tool-btn">重置</button>
+                <label>重力: <span id="gravity-value">1200</span><input type="range" id="gravity" min="300" max="2500" step="100" value="1200"></label>
+            </div>
+        </div>
+        <div id="canvas-container">
+            <canvas id="main-canvas"></canvas>
+        </div>
+    </div>
+
+    <script type="module" src="src/main.js"></script>
+</body>
+</html>
