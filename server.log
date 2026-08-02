@@ -1,0 +1,105 @@
+::1 - - [02/Aug/2026 16:36:56] "GET /index.html HTTP/1.1" 200 -
+::1 - - [02/Aug/2026 16:38:19] "GET /test-optimization.html HTTP/1.1" 200 -
+::1 - - [02/Aug/2026 16:38:19] code 404, message File not found
+::1 - - [02/Aug/2026 16:38:19] "GET /favicon.ico HTTP/1.1" 404 -
+::1 - - [02/Aug/2026 16:38:20] "GET /src/systems/cloth-simulation-optimized.js HTTP/1.1" 200 -
+::1 - - [02/Aug/2026 16:38:20] "GET /src/utils/vector2d.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:38:20] "GET /src/systems/cloth-renderer-webgl.js HTTP/1.1" 200 -
+::1 - - [02/Aug/2026 16:38:21] "GET /src/systems/cloth-simulation.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:38:38] "GET /index.html HTTP/1.1" 200 -
+::1 - - [02/Aug/2026 16:38:38] "GET /src/main.js HTTP/1.1" 200 -
+::1 - - [02/Aug/2026 16:38:38] "GET /css/style.css HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:38:38] "GET /src/systems/capsule-body.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:38:38] "GET /src/systems/interaction-tools.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:38:38] "GET /src/systems/material.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:38:38] "GET /src/systems/track.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:38:38] "GET /src/systems/scene.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:38:38] "GET /src/systems/cloth-import.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:39:19] code 404, message File not found
+::1 - - [02/Aug/2026 16:39:19] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+::1 - - [02/Aug/2026 16:39:25] "GET /index.html HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:39:25] "GET /src/main.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:39:25] "GET /src/systems/cloth-simulation-optimized.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:39:25] "GET /src/systems/cloth-renderer-webgl.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:39:25] code 404, message File not found
+::1 - - [02/Aug/2026 16:39:25] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+::1 - - [02/Aug/2026 16:41:06] "GET /index.html HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:41:06] code 404, message File not found
+::1 - - [02/Aug/2026 16:41:06] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+::1 - - [02/Aug/2026 16:41:06] "GET /src/main.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:41:06] "GET /src/systems/cloth-simulation-optimized.js HTTP/1.1" 200 -
+::1 - - [02/Aug/2026 16:41:06] "GET /src/systems/cloth-renderer-webgl.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:41:07] "GET /index.html HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:41:07] code 404, message File not found
+::1 - - [02/Aug/2026 16:41:07] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+::1 - - [02/Aug/2026 16:41:07] "GET /index.html HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:41:07] code 404, message File not found
+::1 - - [02/Aug/2026 16:41:07] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+::1 - - [02/Aug/2026 16:41:08] "GET /index.html HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:41:08] code 404, message File not found
+::1 - - [02/Aug/2026 16:41:08] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+::1 - - [02/Aug/2026 16:41:37] "GET /index.html HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:41:37] code 404, message File not found
+::1 - - [02/Aug/2026 16:41:37] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+::1 - - [02/Aug/2026 16:41:37] "GET /src/systems/cloth-simulation-optimized.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:42:21] "GET /index.html HTTP/1.1" 200 -
+::1 - - [02/Aug/2026 16:42:40] "GET /index.html HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:42:40] "GET /src/main.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:42:40] code 404, message File not found
+::1 - - [02/Aug/2026 16:42:40] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+::1 - - [02/Aug/2026 16:42:40] "GET /src/systems/cloth-simulation-optimized.js HTTP/1.1" 200 -
+::1 - - [02/Aug/2026 16:42:40] "GET /src/systems/cloth-renderer-webgl.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:43:37] "GET /test-optimization.html HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:43:38] "GET /src/systems/cloth-simulation-optimized.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:44:19] code 404, message File not found
+::1 - - [02/Aug/2026 16:44:19] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+::1 - - [02/Aug/2026 16:46:48] "GET /index.html HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:46:48] code 404, message File not found
+::1 - - [02/Aug/2026 16:46:48] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+::1 - - [02/Aug/2026 16:46:48] "GET /src/main.js HTTP/1.1" 200 -
+::1 - - [02/Aug/2026 16:46:48] "GET /src/systems/cloth-simulation-optimized.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:46:48] "GET /src/systems/cloth-renderer-webgl.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:47:58] code 404, message File not found
+::1 - - [02/Aug/2026 16:47:58] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+::1 - - [02/Aug/2026 16:51:23] "GET /index.html HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:51:23] code 404, message File not found
+::1 - - [02/Aug/2026 16:51:23] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+::1 - - [02/Aug/2026 16:51:23] "GET /src/main.js HTTP/1.1" 200 -
+::1 - - [02/Aug/2026 16:51:23] "GET /src/systems/cloth-simulation-optimized.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:51:23] "GET /src/systems/cloth-renderer-webgl.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:53:22] "GET /index.html HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:53:22] code 404, message File not found
+::1 - - [02/Aug/2026 16:53:22] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+::1 - - [02/Aug/2026 16:53:22] "GET /src/main.js HTTP/1.1" 200 -
+::1 - - [02/Aug/2026 16:53:22] "GET /src/systems/cloth-simulation-optimized.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:53:23] "GET /index.html HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:53:23] code 404, message File not found
+::1 - - [02/Aug/2026 16:53:23] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+::1 - - [02/Aug/2026 16:54:37] "GET /index.html HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:54:37] code 404, message File not found
+::1 - - [02/Aug/2026 16:54:37] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+::1 - - [02/Aug/2026 16:54:37] "GET /src/main.js HTTP/1.1" 200 -
+::1 - - [02/Aug/2026 16:54:37] "GET /src/systems/cloth-simulation-optimized.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:54:37] "GET /src/systems/cloth-renderer-webgl.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:58:30] "GET /index.html HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:58:30] code 404, message File not found
+::1 - - [02/Aug/2026 16:58:30] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+::1 - - [02/Aug/2026 16:58:30] "GET /src/main.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:58:30] "GET /src/systems/cloth-simulation-optimized.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 16:58:30] "GET /src/systems/cloth-renderer-webgl.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 20:46:48] "GET / HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 20:46:48] "GET /css/style.css HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 20:46:48] "GET /src/main.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 20:46:48] "GET /src/systems/capsule-body.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 20:46:48] "GET /src/systems/cloth-simulation.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 20:46:48] "GET /src/systems/cloth-simulation-optimized.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 20:46:48] "GET /src/systems/cloth-renderer-webgl.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 20:46:48] "GET /src/systems/track.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 20:46:48] "GET /src/systems/interaction-tools.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 20:46:48] "GET /src/systems/material.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 20:46:48] "GET /src/systems/scene.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 20:46:48] "GET /src/systems/cloth-import.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 20:46:48] "GET /src/utils/vector2d.js HTTP/1.1" 304 -
+::1 - - [02/Aug/2026 20:46:49] code 404, message File not found
+::1 - - [02/Aug/2026 20:46:49] "GET /favicon.ico HTTP/1.1" 404 -
+::1 - - [02/Aug/2026 20:47:53] "GET / HTTP/1.1" 304 -
